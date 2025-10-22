@@ -155,6 +155,9 @@ def index():
     difference_summary = []
     available_columns: List[str] = []
     selected_keys_label = ""
+    total_rows = 0
+    duplicate_row_count = 0
+    duplicate_key_count = 0
 
     if request.method == "POST":
         query_input = request.form.get("query", "")
@@ -173,6 +176,9 @@ def index():
                 columns=[],
                 available_columns=[],
                 selected_keys_label="",
+                total_rows=total_rows,
+                duplicate_row_count=duplicate_row_count,
+                duplicate_key_count=duplicate_key_count,
             )
 
         try:
@@ -188,9 +194,13 @@ def index():
                 columns=[],
                 available_columns=[],
                 selected_keys_label="",
+                total_rows=total_rows,
+                duplicate_row_count=duplicate_row_count,
+                duplicate_key_count=duplicate_key_count,
             )
 
         available_columns = df.columns.tolist()
+        total_rows = len(df)
 
         if not selected_keys:
             flash(
@@ -206,6 +216,9 @@ def index():
                 columns=[],
                 available_columns=available_columns,
                 selected_keys_label="",
+                total_rows=total_rows,
+                duplicate_row_count=duplicate_row_count,
+                duplicate_key_count=duplicate_key_count,
             )
 
         missing_keys = [key for key in selected_keys if key not in df.columns]
@@ -223,11 +236,17 @@ def index():
                 columns=[],
                 available_columns=available_columns,
                 selected_keys_label="",
+                total_rows=total_rows,
+                duplicate_row_count=duplicate_row_count,
+                duplicate_key_count=duplicate_key_count,
             )
 
         selected_keys_label = ", ".join(selected_keys)
 
         duplicates_df, difference_summary = compute_duplicates(df, selected_keys)
+        duplicate_row_count = len(duplicates_df)
+        if selected_keys:
+            duplicate_key_count = duplicates_df.groupby(selected_keys).ngroups
 
         if duplicates_df.empty:
             flash("Nenhuma duplicidade encontrada para as colunas informadas.", "info")
@@ -247,6 +266,9 @@ def index():
         columns=columns,
         available_columns=available_columns,
         selected_keys_label=selected_keys_label,
+        total_rows=total_rows,
+        duplicate_row_count=duplicate_row_count,
+        duplicate_key_count=duplicate_key_count,
     )
 
 

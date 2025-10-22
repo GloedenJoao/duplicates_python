@@ -37,7 +37,7 @@ main {
 
 .safra-footer {
   background-color: #001a33;
-  color: rgba(255, 255, 255, 0.65);
+  color: #ffffff;
   flex-shrink: 0;
 }
 
@@ -231,6 +231,37 @@ main {
 .result-card,
 .difference-card {
   border-radius: 1.5rem;
+}
+
+.metrics-row .metric-card {
+  border-radius: 1.25rem;
+  background: #fff;
+  box-shadow: 0 1rem 2.5rem -1.5rem rgba(0, 51, 102, 0.45);
+  border: 1px solid rgba(0, 51, 102, 0.1);
+  padding: 1.5rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.metric-label {
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #5a6a7d;
+}
+
+.metric-value {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--safra-blue);
+  margin: 0;
+}
+
+.metric-footnote {
+  font-size: 0.75rem;
+  color: #7b8ba1;
 }
 
 .result-card .card-header,
