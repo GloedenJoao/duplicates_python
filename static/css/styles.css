@@ -272,12 +272,42 @@ body {
 }
 
 .diff-badge {
-  background-color: rgba(212, 175, 55, 0.15);
-  color: var(--safra-blue);
-  border: 1px solid rgba(212, 175, 55, 0.5);
+  font-weight: 600;
+  letter-spacing: 0.02em;
   margin-right: 0;
   margin-bottom: 0;
   padding: 0.35rem 0.8rem;
+  border: 1px solid transparent;
+}
+
+.diff-badge-blue {
+  background-color: rgba(0, 86, 179, 0.15);
+  color: #004a91;
+  border-color: rgba(0, 86, 179, 0.35);
+}
+
+.diff-badge-gold {
+  background-color: rgba(212, 175, 55, 0.18);
+  color: #5a470d;
+  border-color: rgba(212, 175, 55, 0.4);
+}
+
+.diff-badge-green {
+  background-color: rgba(16, 133, 101, 0.16);
+  color: #0c5f48;
+  border-color: rgba(16, 133, 101, 0.35);
+}
+
+.diff-badge-purple {
+  background-color: rgba(111, 66, 193, 0.16);
+  color: #4f2a91;
+  border-color: rgba(111, 66, 193, 0.35);
+}
+
+.diff-badge-teal {
+  background-color: rgba(0, 150, 199, 0.18);
+  color: #035c75;
+  border-color: rgba(0, 150, 199, 0.35);
 }
 
 .empty-state .lead {
