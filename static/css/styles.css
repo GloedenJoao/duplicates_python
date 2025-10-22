@@ -1,0 +1,99 @@
+:root {
+  --safra-blue: #003366;
+  --safra-gold: #d4af37;
+  --safra-light: #f6f7f9;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background-color: var(--safra-light);
+  color: #1a1a1a;
+}
+
+.safra-navbar {
+  background: linear-gradient(135deg, #001a33, var(--safra-blue));
+}
+
+.safra-footer {
+  background-color: #001a33;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.text-safra {
+  color: var(--safra-blue) !important;
+}
+
+.btn-safra {
+  background-color: var(--safra-gold);
+  color: #00234f;
+  border: none;
+  box-shadow: 0 8px 20px rgba(212, 175, 55, 0.2);
+}
+
+.btn-safra:hover {
+  background-color: #c39b2a;
+  color: #001a33;
+}
+
+.table-safra {
+  background-color: var(--safra-blue);
+  color: #fff;
+}
+
+.table thead th {
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+}
+
+.table tbody tr:hover {
+  background-color: rgba(0, 51, 102, 0.08);
+}
+
+.diff-badge {
+  background-color: rgba(212, 175, 55, 0.15);
+  color: var(--safra-blue);
+  border: 1px solid rgba(212, 175, 55, 0.5);
+  margin-right: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.alert-stack .alert {
+  border-radius: 1rem;
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.08);
+}
+
+.card {
+  border-radius: 1.5rem;
+}
+
+.table-responsive {
+  border-radius: 1.5rem;
+  background-color: #fff;
+}
+
+.empty-state .icon-wrapper {
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 1.5rem;
+  background-color: rgba(0, 51, 102, 0.1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: var(--safra-blue);
+}
+
+.badge.text-bg-primary {
+  background-color: var(--safra-blue) !important;
+}
+
+.table-borderless tbody tr:not(:last-child) {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+@media (max-width: 767.98px) {
+  .btn-safra {
+    width: 100%;
+  }
+}

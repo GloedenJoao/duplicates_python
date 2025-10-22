@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block title %}Analisador de Duplicidades{% endblock %}
+{% block content %}
+<section class="card border-0 shadow-sm mb-4">
+  <div class="card-body p-4">
+    <h1 class="h4 fw-semibold mb-4 text-safra">Analise duplicidades em segundos</h1>
+    <form method="post" class="row g-3">
+      <div class="col-12">
+        <label for="query" class="form-label fw-medium">Tabela ou consulta SQL</label>
+        <textarea class="form-control form-control-lg" id="query" name="query" rows="4" placeholder="SELECT * FROM flights">{{ query }}</textarea>
+        <div class="form-text">Você pode informar apenas o nome da tabela (ex: <code>flights</code>) ou uma consulta completa iniciada por <code>SELECT</code> ou <code>WITH</code>.</div>
+      </div>
+      <div class="col-12 col-md-6">
+        <label for="keys" class="form-label fw-medium">Colunas chave</label>
+        <input type="text" class="form-control form-control-lg" id="keys" name="keys" value="{{ keys }}" placeholder="airline, flight_number">
+        <div class="form-text">Separe as colunas por vírgula na ordem desejada.</div>
+      </div>
+      <div class="col-12 col-md-6 align-self-end text-md-end">
+        <button type="submit" class="btn btn-lg btn-safra px-4">Executar análise</button>
+      </div>
+    </form>
+    <div class="mt-4 small text-muted">
+      <span class="badge rounded-pill text-bg-light">SQLite</span>
+      <span class="badge rounded-pill text-bg-light">Pronto para Spark</span>
+      <span class="badge rounded-pill text-bg-light">Flask</span>
+    </div>
+  </div>
+</section>
+
+{% if columns %}
+<section class="mb-4">
+  <div class="d-flex align-items-center mb-3">
+    <h2 class="h5 mb-0 text-safra">Resultado</h2>
+    <span class="ms-3 text-muted">Ordenado por {{ keys }}</span>
+  </div>
+  <div class="table-responsive shadow-sm rounded-4 overflow-hidden">
+    <table class="table table-hover align-middle mb-0">
+      <thead class="table-safra">
+        <tr>
+          {% for column in columns %}
+            <th scope="col">{{ column }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in duplicates_table %}
+          <tr>
+            {% for column in columns %}
+              <td>{{ row[column] }}</td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endif %}
+
+{% if difference_summary %}
+<section>
+  <div class="d-flex align-items-center mb-3">
+    <h2 class="h5 mb-0 text-safra">Tipos de duplicidade</h2>
+    <span class="ms-3 text-muted">Realce visual das colunas com divergências</span>
+  </div>
+  <div class="table-responsive shadow-sm rounded-4 overflow-hidden">
+    <table class="table table-borderless align-middle mb-0">
+      <thead class="table-light">
+        <tr>
+          <th scope="col">Chave</th>
+          <th scope="col" class="text-center">Qtd. Registros</th>
+          <th scope="col">Colunas com diferenças</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for summary in difference_summary %}
+          <tr class="difference-row">
+            <td class="fw-medium">{{ format_key(summary.key) }}</td>
+            <td class="text-center">
+              <span class="badge rounded-pill text-bg-primary">{{ summary.duplicate_count }}</span>
+            </td>
+            <td>
+              {% if summary.difference_columns %}
+                {% for col in summary.difference_columns %}
+                  <span class="badge rounded-pill diff-badge">{{ col }}</span>
+                {% endfor %}
+              {% else %}
+                <span class="text-muted">Sem divergências entre as linhas duplicadas.</span>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endif %}
+
+{% if not duplicates_table and request.method == 'POST' %}
+<section class="empty-state text-center py-5">
+  <div class="icon-wrapper mb-3">
+    <i class="bi bi-search"></i>
+  </div>
+  <p class="lead text-muted">Aguardando uma consulta com resultados duplicados para exibir aqui.</p>
+</section>
+{% endif %}
+{% endblock %}
+{% block extra_head %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+{% endblock %}
