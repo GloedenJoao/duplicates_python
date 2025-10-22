@@ -150,13 +150,15 @@ def index():
     initialize_database()
 
     query_input = ""
-    keys_input = ""
+    selected_keys: List[str] = []
     duplicates_table = None
     difference_summary = []
+    available_columns: List[str] = []
+    selected_keys_label = ""
 
     if request.method == "POST":
         query_input = request.form.get("query", "")
-        keys_input = request.form.get("keys", "")
+        selected_keys = request.form.getlist("selected_keys")
 
         try:
             query = build_query_from_input(query_input)
@@ -165,22 +167,12 @@ def index():
             return render_template(
                 "index.html",
                 query=query_input,
-                keys=keys_input,
+                selected_keys=selected_keys,
                 duplicates_table=None,
                 difference_summary=[],
                 columns=[],
-            )
-
-        keys = [key.strip() for key in keys_input.split(",") if key.strip()]
-        if not keys:
-            flash("Informe ao menos uma coluna chave separada por vírgulas.", "warning")
-            return render_template(
-                "index.html",
-                query=query_input,
-                keys=keys_input,
-                duplicates_table=None,
-                difference_summary=[],
-                columns=[],
+                available_columns=[],
+                selected_keys_label="",
             )
 
         try:
@@ -190,13 +182,33 @@ def index():
             return render_template(
                 "index.html",
                 query=query_input,
-                keys=keys_input,
+                selected_keys=selected_keys,
                 duplicates_table=None,
                 difference_summary=[],
                 columns=[],
+                available_columns=[],
+                selected_keys_label="",
             )
 
-        missing_keys = [key for key in keys if key not in df.columns]
+        available_columns = df.columns.tolist()
+
+        if not selected_keys:
+            flash(
+                "Selecione ao menos uma coluna para identificar as duplicidades.",
+                "info",
+            )
+            return render_template(
+                "index.html",
+                query=query_input,
+                selected_keys=selected_keys,
+                duplicates_table=None,
+                difference_summary=[],
+                columns=[],
+                available_columns=available_columns,
+                selected_keys_label="",
+            )
+
+        missing_keys = [key for key in selected_keys if key not in df.columns]
         if missing_keys:
             flash(
                 "Colunas não encontradas no resultado: " + ", ".join(missing_keys),
@@ -205,13 +217,17 @@ def index():
             return render_template(
                 "index.html",
                 query=query_input,
-                keys=keys_input,
+                selected_keys=selected_keys,
                 duplicates_table=None,
                 difference_summary=[],
-                columns=df.columns.tolist(),
+                columns=[],
+                available_columns=available_columns,
+                selected_keys_label="",
             )
 
-        duplicates_df, difference_summary = compute_duplicates(df, keys)
+        selected_keys_label = ", ".join(selected_keys)
+
+        duplicates_df, difference_summary = compute_duplicates(df, selected_keys)
 
         if duplicates_df.empty:
             flash("Nenhuma duplicidade encontrada para as colunas informadas.", "info")
@@ -225,10 +241,12 @@ def index():
     return render_template(
         "index.html",
         query=query_input,
-        keys=keys_input,
+        selected_keys=selected_keys,
         duplicates_table=duplicates_table,
         difference_summary=difference_summary,
         columns=columns,
+        available_columns=available_columns,
+        selected_keys_label=selected_keys_label,
     )
 
 

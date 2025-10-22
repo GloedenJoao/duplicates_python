@@ -10,10 +10,31 @@
         <textarea class="form-control form-control-lg" id="query" name="query" rows="4" placeholder="SELECT * FROM flights">{{ query }}</textarea>
         <div class="form-text">Você pode informar apenas o nome da tabela (ex: <code>flights</code>) ou uma consulta completa iniciada por <code>SELECT</code> ou <code>WITH</code>.</div>
       </div>
+      <div class="col-12">
+        <label class="form-label fw-medium">Colunas chave</label>
+        {% if available_columns %}
+          <div class="key-selector">
+            {% for column in available_columns %}
+              <input type="checkbox" class="btn-check" id="key-{{ loop.index }}" name="selected_keys" value="{{ column }}" {% if column in selected_keys %}checked{% endif %}>
+              <label class="btn btn-outline-safra" for="key-{{ loop.index }}">{{ column }}</label>
+            {% endfor %}
+          </div>
+          <div class="form-text">Clique nas colunas para selecioná-las como chave primária da análise.</div>
+        {% else %}
+          <div class="alert alert-light border rounded-4 mb-0" role="alert">
+            Informe a tabela ou consulta e clique em <strong>Executar análise</strong> para carregar as colunas disponíveis.
+          </div>
+        {% endif %}
+      </div>
       <div class="col-12 col-md-6">
-        <label for="keys" class="form-label fw-medium">Colunas chave</label>
-        <input type="text" class="form-control form-control-lg" id="keys" name="keys" value="{{ keys }}" placeholder="airline, flight_number">
-        <div class="form-text">Separe as colunas por vírgula na ordem desejada.</div>
+        {% if selected_keys %}
+          <div class="selected-keys-summary">
+            <span class="fw-medium text-safra">Chaves selecionadas:</span>
+            <span class="text-muted">{{ selected_keys_label }}</span>
+          </div>
+        {% else %}
+          <div class="form-text">Selecione uma ou mais colunas acima para identificar duplicidades.</div>
+        {% endif %}
       </div>
       <div class="col-12 col-md-6 align-self-end text-md-end">
         <button type="submit" class="btn btn-lg btn-safra px-4">Executar análise</button>
@@ -31,7 +52,7 @@
 <section class="mb-4">
   <div class="d-flex align-items-center mb-3">
     <h2 class="h5 mb-0 text-safra">Resultado</h2>
-    <span class="ms-3 text-muted">Ordenado por {{ keys }}</span>
+    <span class="ms-3 text-muted">Ordenado por {{ selected_keys_label }}</span>
   </div>
   <div class="table-responsive shadow-sm rounded-4 overflow-hidden">
     <table class="table table-hover align-middle mb-0">
