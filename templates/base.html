@@ -12,12 +12,19 @@
     {% block extra_head %}{% endblock %}
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark shadow-sm safra-navbar">
-      <div class="container-fluid">
-        <span class="navbar-brand fw-semibold">Safra Duplicate Insights</span>
+    <header class="safra-navbar shadow-sm">
+      <div class="container d-flex flex-column flex-lg-row align-items-lg-center justify-content-between py-3 gap-2">
+        <div>
+          <span class="navbar-brand d-block fw-semibold text-white mb-1">Safra Duplicate Insights</span>
+          <span class="text-white-50 small">Encontre duplicidades relevantes sem esforço.</span>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <span class="badge rounded-pill text-bg-light text-uppercase small">Dados confiáveis</span>
+          <span class="badge rounded-pill text-bg-light text-uppercase small">Fluxos ágeis</span>
+        </div>
       </div>
-    </nav>
-    <main class="py-5">
+    </header>
+    <main class="py-5 position-relative">
       <div class="container">
         {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}

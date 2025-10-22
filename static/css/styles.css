@@ -11,7 +11,21 @@ body {
 }
 
 .safra-navbar {
-  background: linear-gradient(135deg, #001a33, var(--safra-blue));
+  background: linear-gradient(120deg, #001a33 0%, #003f7d 50%, #0056b3 100%);
+}
+
+.safra-navbar .navbar-brand {
+  font-size: 1.35rem;
+}
+
+.safra-navbar .text-white-50 {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.safra-navbar .badge {
+  background-color: rgba(255, 255, 255, 0.2) !important;
+  color: #fff;
+  letter-spacing: 0.08em;
 }
 
 .safra-footer {
@@ -33,6 +47,10 @@ body {
 .btn-safra:hover {
   background-color: #c39b2a;
   color: #001a33;
+}
+
+.btn-safra:focus-visible {
+  box-shadow: 0 0 0 0.25rem rgba(212, 175, 55, 0.35);
 }
 
 .btn-outline-safra {
@@ -64,15 +82,45 @@ body {
   gap: 0.5rem;
 }
 
-.selected-keys-summary {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1rem;
+.assist-text {
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  color: #5a6a7d;
+}
+
+.soft-alert {
+  background-color: rgba(0, 51, 102, 0.05);
   border-radius: 1rem;
-  background-color: #fff;
-  border: 1px dashed rgba(0, 51, 102, 0.25);
-  font-size: 0.95rem;
+  padding: 1rem 1.25rem;
+  color: #20344d;
+  border: 1px dashed rgba(0, 51, 102, 0.15);
+}
+
+.selected-keys-panel {
+  background: rgba(0, 51, 102, 0.05);
+  border: 1px solid rgba(0, 51, 102, 0.12);
+  border-radius: 1rem;
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.selected-keys-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.bg-soft-blue {
+  background-color: rgba(0, 86, 179, 0.15) !important;
+  color: #004a91 !important;
+}
+
+.bg-soft-gold {
+  background-color: rgba(212, 175, 55, 0.18) !important;
+  color: #5a470d !important;
 }
 
 .table-safra {
@@ -88,14 +136,6 @@ body {
 
 .table tbody tr:hover {
   background-color: rgba(0, 51, 102, 0.08);
-}
-
-.diff-badge {
-  background-color: rgba(212, 175, 55, 0.15);
-  color: var(--safra-blue);
-  border: 1px solid rgba(212, 175, 55, 0.5);
-  margin-right: 0.25rem;
-  margin-bottom: 0.25rem;
 }
 
 .alert-stack .alert {
@@ -132,8 +172,127 @@ body {
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
+.hero-card {
+  border-radius: 1.5rem;
+  background: linear-gradient(135deg, rgba(0, 26, 51, 0.95), rgba(0, 68, 136, 0.92));
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top right, rgba(255, 255, 255, 0.15), transparent 55%);
+  pointer-events: none;
+}
+
+.hero-title {
+  font-size: clamp(1.9rem, 2.4vw + 1.2rem, 2.6rem);
+  line-height: 1.1;
+}
+
+.hero-eyebrow {
+  letter-spacing: 0.2em;
+  opacity: 0.65;
+}
+
+.hero-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.95rem;
+}
+
+.hero-list li i {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.hero-card .badge {
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--safra-blue);
+}
+
+.input-card {
+  border-radius: 1.5rem;
+  background-color: #ffffff;
+}
+
+.result-card,
+.difference-card {
+  border-radius: 1.5rem;
+}
+
+.result-card .card-header,
+.difference-card .card-header {
+  border-bottom: none;
+}
+
+.table-scroll {
+  max-height: 420px;
+  overflow: auto;
+  border-radius: 1.25rem;
+}
+
+.table-scroll::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.table-scroll::-webkit-scrollbar-thumb {
+  background: rgba(0, 51, 102, 0.2);
+  border-radius: 999px;
+}
+
+.result-meta .badge {
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.difference-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 1rem;
+}
+
+.difference-item {
+  border: 1px solid rgba(0, 51, 102, 0.12);
+  border-radius: 1.25rem;
+  padding: 1.25rem;
+  background-color: #fff;
+  box-shadow: 0 1rem 2rem -1.25rem rgba(0, 51, 102, 0.35);
+}
+
+.difference-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.diff-badge {
+  background-color: rgba(212, 175, 55, 0.15);
+  color: var(--safra-blue);
+  border: 1px solid rgba(212, 175, 55, 0.5);
+  margin-right: 0;
+  margin-bottom: 0;
+  padding: 0.35rem 0.8rem;
+}
+
+.empty-state .lead {
+  font-size: 1.1rem;
+}
+
 @media (max-width: 767.98px) {
   .btn-safra {
     width: 100%;
+  }
+
+  .hero-card,
+  .input-card,
+  .result-card,
+  .difference-card {
+    border-radius: 1rem;
   }
 }

@@ -1,117 +1,159 @@
 {% extends "base.html" %}
 {% block title %}Analisador de Duplicidades{% endblock %}
 {% block content %}
-<section class="card border-0 shadow-sm mb-4">
-  <div class="card-body p-4">
-    <h1 class="h4 fw-semibold mb-4 text-safra">Analise duplicidades em segundos</h1>
-    <form method="post" class="row g-3">
-      <div class="col-12">
-        <label for="query" class="form-label fw-medium">Tabela ou consulta SQL</label>
-        <textarea class="form-control form-control-lg" id="query" name="query" rows="4" placeholder="SELECT * FROM flights">{{ query }}</textarea>
-        <div class="form-text">Você pode informar apenas o nome da tabela (ex: <code>flights</code>) ou uma consulta completa iniciada por <code>SELECT</code> ou <code>WITH</code>.</div>
-      </div>
-      <div class="col-12">
-        <label class="form-label fw-medium">Colunas chave</label>
-        {% if available_columns %}
-          <div class="key-selector">
-            {% for column in available_columns %}
-              <input type="checkbox" class="btn-check" id="key-{{ loop.index }}" name="selected_keys" value="{{ column }}" {% if column in selected_keys %}checked{% endif %}>
-              <label class="btn btn-outline-safra" for="key-{{ loop.index }}">{{ column }}</label>
-            {% endfor %}
+<section class="mb-5">
+  <div class="row g-4 align-items-stretch">
+    <div class="col-12 col-lg-5">
+      <div class="card hero-card border-0 shadow-sm h-100 text-white">
+        <div class="card-body p-4 p-lg-5">
+          <p class="hero-eyebrow text-uppercase small mb-2">Visão rápida</p>
+          <h1 class="hero-title fw-semibold mb-3">Analise duplicidades em segundos</h1>
+          <p class="mb-4">Insira a origem dos dados, escolha as colunas-chave e descubra conflitos sem revisar planilhas manualmente.</p>
+          <ul class="hero-list list-unstyled mb-4">
+            <li><i class="bi bi-check2-circle"></i> Destaque automático para colunas com divergências.</li>
+            <li><i class="bi bi-lightning-charge"></i> Interface focada em ações rápidas.</li>
+            <li><i class="bi bi-database"></i> Funciona com tabelas SQLite e consultas SQL completas.</li>
+          </ul>
+          <div class="d-flex flex-wrap gap-2">
+            <span class="badge rounded-pill bg-white text-safra fw-medium">SQL pronto</span>
+            <span class="badge rounded-pill bg-white text-safra fw-medium">Spark friendly</span>
+            <span class="badge rounded-pill bg-white text-safra fw-medium">Uso imediato</span>
           </div>
-          <div class="form-text">Clique nas colunas para selecioná-las como chave primária da análise.</div>
-        {% else %}
-          <div class="alert alert-light border rounded-4 mb-0" role="alert">
-            Informe a tabela ou consulta e clique em <strong>Executar análise</strong> para carregar as colunas disponíveis.
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-lg-7">
+      <div class="card input-card border-0 shadow-sm h-100">
+        <div class="card-body p-4 p-lg-5">
+          <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+            <div>
+              <h2 class="h4 fw-semibold mb-1 text-safra">Configure a análise</h2>
+              <p class="mb-0 text-muted">Informe a consulta e defina as chaves que caracterizam um registro único.</p>
+            </div>
+            <span class="badge rounded-pill bg-light text-dark">Passo único</span>
           </div>
-        {% endif %}
+          <form method="post" class="row g-4">
+            <div class="col-12">
+              <label for="query" class="form-label fw-medium">Fonte dos dados</label>
+              <textarea class="form-control form-control-lg" id="query" name="query" rows="4" placeholder="Ex.: SELECT * FROM flights">{{ query }}</textarea>
+              <div class="assist-text">Use apenas o nome da tabela ou envie uma consulta completa iniciada por <code>SELECT</code> ou <code>WITH</code>.</div>
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-medium">Colunas-chave</label>
+              {% if available_columns %}
+                <div class="key-selector">
+                  {% for column in available_columns %}
+                    <input type="checkbox" class="btn-check" id="key-{{ loop.index }}" name="selected_keys" value="{{ column }}" {% if column in selected_keys %}checked{% endif %}>
+                    <label class="btn btn-outline-safra" for="key-{{ loop.index }}">{{ column }}</label>
+                  {% endfor %}
+                </div>
+                <div class="assist-text">Selecione os campos que precisam ser únicos.</div>
+              {% else %}
+                <div class="soft-alert" role="alert">
+                  Preencha a fonte e clique em <strong>Executar análise</strong> para visualizar as colunas disponíveis.
+                </div>
+              {% endif %}
+            </div>
+            <div class="col-12">
+              {% if selected_keys %}
+                <div class="selected-keys-panel">
+                  <span class="fw-medium text-safra">Chaves atuais</span>
+                  <div class="selected-keys-list">
+                    {% for key in selected_keys %}
+                      <span class="badge rounded-pill bg-soft-blue">{{ key }}</span>
+                    {% endfor %}
+                  </div>
+                </div>
+              {% else %}
+                <div class="assist-text">Escolha pelo menos uma coluna para comparar registros.</div>
+              {% endif %}
+            </div>
+            <div class="col-12 text-end">
+              <button type="submit" class="btn btn-lg btn-safra px-4">Executar análise</button>
+            </div>
+          </form>
+        </div>
       </div>
-      <div class="col-12 col-md-6">
-        {% if selected_keys %}
-          <div class="selected-keys-summary">
-            <span class="fw-medium text-safra">Chaves selecionadas:</span>
-            <span class="text-muted">{{ selected_keys_label }}</span>
-          </div>
-        {% else %}
-          <div class="form-text">Selecione uma ou mais colunas acima para identificar duplicidades.</div>
-        {% endif %}
-      </div>
-      <div class="col-12 col-md-6 align-self-end text-md-end">
-        <button type="submit" class="btn btn-lg btn-safra px-4">Executar análise</button>
-      </div>
-    </form>
-    <div class="mt-4 small text-muted">
-      <span class="badge rounded-pill text-bg-light">SQLite</span>
-      <span class="badge rounded-pill text-bg-light">Pronto para Spark</span>
-      <span class="badge rounded-pill text-bg-light">Flask</span>
     </div>
   </div>
 </section>
 
 {% if columns %}
-<section class="mb-4">
-  <div class="d-flex align-items-center mb-3">
-    <h2 class="h5 mb-0 text-safra">Resultado</h2>
-    <span class="ms-3 text-muted">Ordenado por {{ selected_keys_label }}</span>
-  </div>
-  <div class="table-responsive shadow-sm rounded-4 overflow-hidden">
-    <table class="table table-hover align-middle mb-0">
-      <thead class="table-safra">
-        <tr>
-          {% for column in columns %}
-            <th scope="col">{{ column }}</th>
-          {% endfor %}
-        </tr>
-      </thead>
-      <tbody>
-        {% for row in duplicates_table %}
-          <tr>
-            {% for column in columns %}
-              <td>{{ row[column] }}</td>
-            {% endfor %}
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+<section class="mb-5">
+  <div class="card result-card border-0 shadow-sm">
+    <div class="card-header bg-white border-0 pb-0">
+      <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-end gap-3">
+        <div>
+          <h2 class="h4 fw-semibold text-safra mb-1">Resultado da análise</h2>
+          <p class="text-muted mb-0">Registros ordenados por {{ selected_keys_label }}.</p>
+        </div>
+        <div class="result-meta d-flex flex-wrap gap-2">
+          <span class="badge rounded-pill bg-soft-blue">{{ duplicates_table|length }} ocorrências</span>
+          <span class="badge rounded-pill bg-soft-gold">{{ columns|length }} colunas avaliadas</span>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="table-scroll">
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-safra">
+              <tr>
+                {% for column in columns %}
+                  <th scope="col">{{ column }}</th>
+                {% endfor %}
+              </tr>
+            </thead>
+            <tbody>
+              {% for row in duplicates_table %}
+                <tr>
+                  {% for column in columns %}
+                    <td>{{ row[column] }}</td>
+                  {% endfor %}
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 {% endif %}
 
 {% if difference_summary %}
 <section>
-  <div class="d-flex align-items-center mb-3">
-    <h2 class="h5 mb-0 text-safra">Tipos de duplicidade</h2>
-    <span class="ms-3 text-muted">Realce visual das colunas com divergências</span>
-  </div>
-  <div class="table-responsive shadow-sm rounded-4 overflow-hidden">
-    <table class="table table-borderless align-middle mb-0">
-      <thead class="table-light">
-        <tr>
-          <th scope="col">Chave</th>
-          <th scope="col" class="text-center">Qtd. Registros</th>
-          <th scope="col">Colunas com diferenças</th>
-        </tr>
-      </thead>
-      <tbody>
+  <div class="card difference-card border-0 shadow-sm">
+    <div class="card-header bg-white border-0 pb-0">
+      <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-end gap-3">
+        <div>
+          <h2 class="h4 fw-semibold text-safra mb-1">Tipos de duplicidade</h2>
+          <p class="text-muted mb-0">Identifique quais campos variam dentro de cada chave repetida.</p>
+        </div>
+        <span class="badge rounded-pill bg-soft-blue">{{ difference_summary|length }} conjuntos analisados</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="difference-grid">
         {% for summary in difference_summary %}
-          <tr class="difference-row">
-            <td class="fw-medium">{{ format_key(summary.key) }}</td>
-            <td class="text-center">
-              <span class="badge rounded-pill text-bg-primary">{{ summary.duplicate_count }}</span>
-            </td>
-            <td>
-              {% if summary.difference_columns %}
+          <article class="difference-item">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="fw-semibold text-safra">{{ format_key(summary.key) }}</span>
+              <span class="badge rounded-pill bg-soft-gold">{{ summary.duplicate_count }} registros</span>
+            </div>
+            {% if summary.difference_columns %}
+              <div class="difference-tags">
                 {% for col in summary.difference_columns %}
                   <span class="badge rounded-pill diff-badge">{{ col }}</span>
                 {% endfor %}
-              {% else %}
-                <span class="text-muted">Sem divergências entre as linhas duplicadas.</span>
-              {% endif %}
-            </td>
-          </tr>
+              </div>
+            {% else %}
+              <span class="text-muted small">Sem divergências entre os registros.</span>
+            {% endif %}
+          </article>
         {% endfor %}
-      </tbody>
-    </table>
+      </div>
+    </div>
   </div>
 </section>
 {% endif %}
@@ -121,7 +163,7 @@
   <div class="icon-wrapper mb-3">
     <i class="bi bi-search"></i>
   </div>
-  <p class="lead text-muted">Aguardando uma consulta com resultados duplicados para exibir aqui.</p>
+  <p class="lead text-muted">Nenhuma duplicidade encontrada para os critérios enviados.</p>
 </section>
 {% endif %}
 {% endblock %}
