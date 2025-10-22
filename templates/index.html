@@ -56,6 +56,31 @@
 </section>
 
 {% if columns %}
+<section class="mb-4">
+  <div class="row g-3 metrics-row">
+    <div class="col-md-4">
+      <div class="metric-card">
+        <span class="metric-label">Total de linhas</span>
+        <p class="metric-value">{{ total_rows }}</p>
+        <span class="metric-footnote">Registros avaliados</span>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="metric-card">
+        <span class="metric-label">Linhas duplicadas</span>
+        <p class="metric-value">{{ duplicate_row_count }}</p>
+        <span class="metric-footnote">Registros com chaves repetidas</span>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="metric-card">
+        <span class="metric-label">Chaves duplicadas</span>
+        <p class="metric-value">{{ duplicate_key_count }}</p>
+        <span class="metric-footnote">Combinações únicas</span>
+      </div>
+    </div>
+  </div>
+</section>
 <section class="mb-5">
   <div class="card result-card border-0 shadow-sm">
     <div class="card-header bg-white border-0 pb-0">
